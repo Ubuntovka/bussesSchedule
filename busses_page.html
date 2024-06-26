@@ -1,0 +1,36 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title>Robert-Siewert-Straẞe</title>
+</head>
+<body style="text-align:center"> 
+
+<h1>Robert-Siewert-Straẞe</h1>
+<h3>Upcoming transport</h3>
+<p id="number"></p>
+<p id="direction"></p>
+<p id="hour">Hour: </p>
+<p id="minute">Minute: </p>
+
+<script> 
+	var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+	const number = document.getElementById('number');
+	const direction = document.getElementById('direction');
+	const hour = document.getElementById('hour');
+	const minute = document.getElementById('minute');
+
+    fetch(apiUrl) 
+      .then((res) => { 
+        return res.json();
+      }).then((data) => { 
+        number.textContent = JSON.stringify(data["departureList"][0]["servingLine"]["number"]);
+        direction.textContent = JSON.stringify(data["departureList"][0]["servingLine"]["direction"]);
+        hour.textContent += JSON.stringify(data["departureList"][0]["realDateTime"]["hour"]);
+        minute.textContent += JSON.stringify(data["departureList"][0]["realDateTime"]["minute"]);
+      }) 
+      .catch((err) => console.debug(err)); 
+  </script> 
+
+	
+</body>
+</html> 
