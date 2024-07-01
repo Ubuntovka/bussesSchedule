@@ -1,64 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Robert-Siewert-Straße</title>
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<style>
-table, td, th {
-  border: 1px solid;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-}
-</style>
+  <title>Robert-Siewert-Straße</title>
+  <meta http-equiv="Content-Type" content="width=device-width, initial-scale=1.0, text/html, charset=UTF-8">
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body style="background-color: lightblue;"> 
+
+<body>
 
 <h1 style="text-align:center;">Robert-Siewert-Straße</h1>
-<h3>Upcoming transport</h3>
+<h3>Bus</h3>
 <!-- <p id="number" style="font-family: verdana; font-size: 20px;"></p>
 <p id="direction"></p>
 <p id="hour">Hour: </p>
 <p id="minute">Minute: </p>
  -->
 
-<table>
-  <tr style="font-size: 25px;">
-    <th>Number</th>
-    <th>Direction</th>
-    <th>Hour</th>
-    <th>Minute</th>
-  </tr>
-  <tr style="font-size: 20px;">
-    <td id="number"></td>
-    <td id="direction"></td>
-    <td id="hour"></td>
-    <td id="minute"></td>
-  </tr>
-</table>
+<div id="table_container">
+<!--  <table class="table">
+    <tr style="font-size: 25px;">
+      <th>Number</th>
+      <th>Direction</th>
+      <th>Hour</th>
+      <th>Minute</th>
+    </tr>
+    <tr style="font-size: 20px;">
+      <td id="number"></td>
+      <td id="direction"></td>
+      <td id="hour"></td>
+      <td id="minute"></td>
+    </tr>
+  </table>
 
-<script> 
-	//var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
-    var apiUrl = "http://localhost:3000/vms";
-	const number = document.getElementById('number');
-	const direction = document.getElementById('direction');
-	const hour = document.getElementById('hour');
-	const minute = document.getElementById('minute');
+  <table class="table">
+    <tr style="font-size: 25px;">
+      <th>Number</th>
+      <th>Direction</th>
+      <th>Hour</th>
+      <th>Minute</th>
+    </tr>
+    <tr style="font-size: 20px;">
+      <td id="number2"></td>
+      <td id="direction2"></td>
+      <td id="hour2"></td>
+      <td id="minute2"></td>
+    </tr>
+  </table>-->
 
-    fetch(apiUrl) 
-      .then((res) => { 
-        return res.json();
-      }).then((data) => { 
-        number.textContent = JSON.stringify(data["departureList"][0]["servingLine"]["number"]);
-        direction.textContent = JSON.stringify(data["departureList"][0]["servingLine"]["direction"]);
-        hour.textContent += JSON.stringify(data["departureList"][0]["realDateTime"]["hour"]);
-        minute.textContent += JSON.stringify(data["departureList"][0]["realDateTime"]["minute"]);
-      }) 
-      .catch((err) => console.debug(err)); 
-  </script> 
+</div>
 
 	
 </body>

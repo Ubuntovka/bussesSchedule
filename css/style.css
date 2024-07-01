@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+ /*   margin: 0;
+    padding: 0;*/
+}
+
+/*.table-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}*/
+
+table {
+    width: 45%;
+    height: 100px;
+    display: inline-block;
+}
+
+
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
