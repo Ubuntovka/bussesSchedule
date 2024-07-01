@@ -1,15 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     text-align: center;
- /*   margin: 0;
-    padding: 0;*/
 }
-
-/*.table-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px;
-}*/
 
 table {
     width: 45%;
