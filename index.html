@@ -1,7 +1,8 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Robert-Siewert-Straẞe</title>
+<title>Robert-Siewert-Straße</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <style>
 table, td, th {
   border: 1px solid;
@@ -16,7 +17,7 @@ table {
 </head>
 <body style="background-color: lightblue;"> 
 
-<h1 style="text-align:center;">Robert-Siewert-Straẞe</h1>
+<h1 style="text-align:center;">Robert-Siewert-Straße</h1>
 <h3>Upcoming transport</h3>
 <!-- <p id="number" style="font-family: verdana; font-size: 20px;"></p>
 <p id="direction"></p>
@@ -40,7 +41,8 @@ table {
 </table>
 
 <script> 
-	var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+	//var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+    var apiUrl = "http://localhost:3000/vms";
 	const number = document.getElementById('number');
 	const direction = document.getElementById('direction');
 	const hour = document.getElementById('hour');
