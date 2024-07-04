@@ -1,29 +1,28 @@
 
-//var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
 
 function showAlert() {
     alert("Hi Masha!");
 }
 
-// function showTransport(transportType) {
-//     generateTableForTransport(transportType);
-// }
-
 async function liGenerator() {
     try {
-        const response = await fetch('http://localhost:3000/vms');
+        //const response = await fetch('http://localhost:3000/vms');
+        const response = await fetch(apiUrl);
         const data = await response.json();
-        let navBar = '<ul>';
+        let navBar = '<ul class="filter-btn-row">';
+        navBar += '<li></li>';
         const transportsSet = new Set();
-        data["departureList"].forEach(item => {
-            if(!transportsSet.has(item["servingLine"]["name"])){
-                navBar += `<li><button onclick="showTransport('${item["servingLine"]["name"]}')">${item["servingLine"]["name"]}</button></li>`;
+        data["servingLines"].lines.forEach(item => {
+
+            if(!transportsSet.has(item["mode"]["product"])){
+                navBar += `<li><button class="filter-btn" onclick="showTransport('${item["mode"]["product"]}')">${item["mode"]["product"]}</button></li>`;
             }
-            transportsSet.add(item["servingLine"]["name"]);
+            transportsSet.add(item["mode"]["product"]);
         });
         navBar += '</ul>';
-        const tableContainer = document.getElementById('ulli_container');
-        tableContainer.innerHTML = navBar;
+        const ulliContainer = document.getElementById('ulli_container');
+        ulliContainer.innerHTML = navBar;
     } catch (error) {
         console.error(error);
     }
@@ -34,22 +33,34 @@ liGenerator();
 
 async function showTransport(transportType) {
     try {
-        const response = await fetch('http://localhost:3000/vms');
+        const response = await fetch(apiUrl);
         //const response = await fetch("https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON");
         const data = await response.json();
         let table = '<table>';
         table += `<caption><h3>${transportType}</h3></caption>`;
         table += '<tr><th>Number</th><th>Direction</th><th>Real Time</th><th>Scheduled Departure</th></tr>';
+        let counter = true;
         data["departureList"].forEach(item => {
             if (item["servingLine"]["name"] === transportType) {
                 table += presenceOfRealDate(item);
+                counter = false;
             }
         });
 
-        table += '</table>';
-
         const tableContainer = document.getElementById('table_container');
-        tableContainer.innerHTML = table;
+        const noTransportContainer = document.getElementById('no_transport_container');
+
+        if(!counter){
+            table += '</table>';
+            tableContainer.innerHTML = table;
+            noTransportContainer.innerHTML = "";
+        } else {
+            tableContainer.innerHTML = "";
+            noTransportContainer.innerHTML = "<h3>No transport available</h3>";
+        }
+
+
+
     } catch (error) {
         console.error(error);
     }
@@ -68,7 +79,7 @@ function presenceOfRealDate (item){
 
 async function generateTable() {
     try {
-        const response = await fetch('http://localhost:3000/vms');
+        const response = await fetch(apiUrl);
         //const response = await fetch("https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON");
         const data = await response.json();
         let table = '<table>';
