@@ -1,5 +1,6 @@
 
-var apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+//const apiUrl = 'http://localhost:3000/vms';
 
 function showAlert() {
     alert("Hi Masha!");
@@ -7,7 +8,6 @@ function showAlert() {
 
 async function liGenerator() {
     try {
-        //const response = await fetch('http://localhost:3000/vms');
         const response = await fetch(apiUrl);
         const data = await response.json();
         let navBar = '<ul class="filter-btn-row">';
@@ -34,7 +34,6 @@ liGenerator();
 async function showTransport(transportType) {
     try {
         const response = await fetch(apiUrl);
-        //const response = await fetch("https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON");
         const data = await response.json();
         let table = '<table>';
         table += `<caption><h3>${transportType}</h3></caption>`;
@@ -80,7 +79,6 @@ function presenceOfRealDate (item){
 async function generateTable() {
     try {
         const response = await fetch(apiUrl);
-        //const response = await fetch("https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON");
         const data = await response.json();
         let table = '<table>';
         let table2 = '<table>';
