@@ -1,6 +1,6 @@
 
-const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
-//const apiUrl = 'http://localhost:3000/vms';
+//const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
+const apiUrl = 'http://localhost:3000/vms';
 
 function showAlert() {
     alert("Hi Masha!");
@@ -37,11 +37,15 @@ async function showTransport(transportType) {
         const data = await response.json();
         let table = '<table>';
         table += `<caption><h3>${transportType}</h3></caption>`;
-        table += '<tr><th>Number</th><th>Direction</th><th>Real Time</th><th>Scheduled Departure</th></tr>';
+        table += '<tr><th>Number</th><th>Direction</th><th>Time</th><th>Departure in</th></tr>';
+        //
         let counter = true;
         data["departureList"].forEach(item => {
             if (item["servingLine"]["name"] === transportType) {
-                table += presenceOfRealDate(item);
+                table += `<tr><td>${item["servingLine"]["number"]}</td><td>${item["servingLine"]["direction"]}</td>`;
+                //table += presenceOfRealDate(item);
+                table += `<td>${presenceOfRealDate(item)}<br>${item["dateTime"]["hour"]}:${item["dateTime"]["minute"]}</td>`;
+                table += `<td>${item["countdown"]} min.</td></tr>`;
                 counter = false;
             }
         });
@@ -66,44 +70,18 @@ async function showTransport(transportType) {
 }
 
 
+/*function isDelayed(item){
+    if(item["servingLine"]["delay"] > 0){
+
+    }
+}*/
+
+
 function presenceOfRealDate (item){
     if (item["realDateTime"]){
-        return `<tr><td>${item["servingLine"]["number"]}</td><td>${item["servingLine"]["direction"]}
-</td><td>${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}</td><td>${item["dateTime"]["hour"]}:${item["dateTime"]["minute"]}</td></tr>`;
+        return `${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}`;
     } else {
-        return `<tr><td>${item["servingLine"]["number"]}</td><td>${item["servingLine"]["direction"]}
-</td><td>-</td><td>${item["dateTime"]["hour"]}:${item["dateTime"]["minute"]}</td></tr>`;
+        return `-`;
     }
 }
-
-async function generateTable() {
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        let table = '<table>';
-        let table2 = '<table>';
-        table += '<caption><h3>Bus</h3></caption>';
-        table2 += '<caption><h3>Tram</h3></caption>';
-        table += '<tr><th>Number</th><th>Direction</th><th>Real Time</th><th>Scheduled Departure</th></tr>';
-        table2 += '<tr><th>Number</th><th>Direction</th><th>Real Time</th><th>Scheduled Departure</th></tr>';
-        data["departureList"].forEach(item => {
-            if (item["servingLine"]["name"] === "Bus"){
-                table += presenceOfRealDate(item);
-            } else {
-                table2 += presenceOfRealDate(item);
-            }
-        });
-
-        table += '</table>';
-        table2 += '</table>';
-
-        const tableContainer = document.getElementById('table_container');
-        tableContainer.innerHTML = table;
-        tableContainer.innerHTML += table2;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-//generateTable();
 
