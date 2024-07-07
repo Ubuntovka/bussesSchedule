@@ -77,3 +77,11 @@ th {
 .filter-btn:hover {
     background-color: #69696949;
 }
+
+.real-time-delayed{
+    color: red;
+}
+
+.real-time-not-delayed{
+    color: green;
+}

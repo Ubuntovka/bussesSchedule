@@ -70,16 +70,14 @@ async function showTransport(transportType) {
 }
 
 
-/*function isDelayed(item){
-    if(item["servingLine"]["delay"] > 0){
-
-    }
-}*/
-
-
 function presenceOfRealDate (item){
     if (item["realDateTime"]){
-        return `${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}`;
+        if (item["servingLine"]["delay"] > 0){
+            return `<span class="real-time-delayed">${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}</span>`;
+        } else{
+            return `<span class="real-time-not-delayed">${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}</span>`;
+        }
+        
     } else {
         return `-`;
     }
