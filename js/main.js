@@ -54,7 +54,8 @@ async function showTransport(data) {
         if (item["servingLine"]["name"] === currentTransportType) {
             table += `<tr><td>${item["servingLine"]["number"]}</td><td>${item["servingLine"]["direction"]}</td>`;
             //table += presenceOfRealDate(item);
-            table += `<td>${presenceOfRealDate(item)}<br>${item["dateTime"]["hour"]}:${item["dateTime"]["minute"]}</td>`;
+            // table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"])}:${timeFormat(item["dateTime"]["minute"])}</td>`;
+            table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</td>`;
             table += `<td>${item["countdown"]} min.</td></tr>`;
             counter = false;
         }
@@ -73,13 +74,17 @@ async function showTransport(data) {
     }
 }
 
+function timeFormat(hour, minute){
+    return (hour < 10 ? '0' : '') + hour + ":" + (minute < 10 ? '0' : '') + minute;
+}
+
 
 function presenceOfRealDate (item){
     if (item["realDateTime"]){
         if (item["servingLine"]["delay"] > 0){
-            return `<span class="real-time-delayed">${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}</span>`;
+            return `<span class="real-time-delayed">${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</span>`;
         } else{
-            return `<span class="real-time-not-delayed">${item["realDateTime"]["hour"]}:${item["realDateTime"]["minute"]}</span>`;
+            return `<span class="real-time-not-delayed">${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</span>`;
         }
         
     } else {
