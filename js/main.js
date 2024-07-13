@@ -56,7 +56,7 @@ async function showTransport(data) {
             //table += presenceOfRealDate(item);
             // table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"])}:${timeFormat(item["dateTime"]["minute"])}</td>`;
             table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</td>`;
-            table += `<td>${item["countdown"]} min.</td></tr>`;
+            table += `<td>${minutesToHours(item["countdown"])}</td></tr>`;
             counter = false;
         }
     });
@@ -72,6 +72,18 @@ async function showTransport(data) {
         tableContainer.innerHTML = "";
         noTransportContainer.innerHTML = "<h3>No transport available</h3>";
     }
+}
+
+
+function minutesToHours(min){
+    if(min <= 60){
+        return min + " min.";
+    } else {
+        let hours = Math.floor(min / 60);
+        let rest = min % 60;
+        return hours + " h. " + rest + " min.";
+    }
+
 }
 
 function timeFormat(hour, minute){
