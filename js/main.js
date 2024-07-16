@@ -94,9 +94,9 @@ function timeFormat(hour, minute){
 function presenceOfRealDate (item){
     if (item["realDateTime"]){
         if (item["servingLine"]["delay"] > 0){
-            return `<span class="real-time-delayed">${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</span>`;
+            return `<span class="real-time-delayed">${timeFormat(item["realDateTime"]["hour"], item["realDateTime"]["minute"])}</span>`;
         } else{
-            return `<span class="real-time-not-delayed">${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</span>`;
+            return `<span class="real-time-not-delayed">${timeFormat(item["realDateTime"]["hour"], item["realDateTime"]["minute"])}</span>`;
         }
         
     } else {
