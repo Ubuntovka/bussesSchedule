@@ -48,18 +48,19 @@ th {
     background-color: #dddddd;
 }
 
-a:link, a:visited {
-  background-color: darkblue;
-  color: white;
+
+.station-link-btn:link, .station-link-btn:visited {
+  background-color: #ddddddaa;
+  color: black;
   padding: 10px 16px;
-  margin: 5px 35%;
+  margin: 5px 40%;
   text-align: center;
   text-decoration: none;
   display: block;
 }
 
-a:hover, a:active {
-  background-color: #69696949;
+.station-link-btn:hover, .station-link-btn:active {
+    background-color: #69696949;
 }
 
 .filter-btn-row {
