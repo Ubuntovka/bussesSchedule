@@ -48,6 +48,20 @@ th {
     background-color: #dddddd;
 }
 
+a:link, a:visited {
+  background-color: darkblue;
+  color: white;
+  padding: 10px 16px;
+  margin: 5px 35%;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+
+a:hover, a:active {
+  background-color: #69696949;
+}
+
 .filter-btn-row {
     text-align: left;
     padding: 0;
