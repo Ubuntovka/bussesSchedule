@@ -48,6 +48,21 @@ th {
     background-color: #dddddd;
 }
 
+
+.station-link-btn:link, .station-link-btn:visited {
+  background-color: #ddddddaa;
+  color: black;
+  padding: 10px 16px;
+  margin: 5px 40%;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+}
+
+.station-link-btn:hover, .station-link-btn:active {
+    background-color: #69696949;
+}
+
 .filter-btn-row {
     text-align: left;
     padding: 0;
