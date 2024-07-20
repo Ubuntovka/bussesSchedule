@@ -115,9 +115,8 @@ th {
     }
 
     table {
-        width: 100%;
-        margin-left: 0;
-        margin-right: auto;
+        width: 90%;
+        margin: auto;
         display: inline-block;
 
     }
