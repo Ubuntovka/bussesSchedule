@@ -65,11 +65,9 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
+
 update();
 setInterval(isUpdate, 1000);
-
-
-// liGenerator();
 
 
 async function showTransport(data) {
