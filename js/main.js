@@ -13,7 +13,6 @@ function getParameterByName(name, url) {
     }
 
 var streetFromUrl = getParameterByName('street');
-console.log(streetFromUrl);
 
 const apiUrl = apiUrlList[streetFromUrl];
 
@@ -40,6 +39,16 @@ async function update(){
     showTransport(data);
 }
 
+let currentdepartureIn;
+
+async function isUpdate(){
+    const data = await fetchData();
+    if(data["departureList"][0]["countdown"] != currentdepartureIn){
+        update();
+        currentdepartureIn = data["departureList"][0]["countdown"];
+    }
+}
+
 async function liGenerator(data) {
     let navBar = '<ul class="filter-btn-row">';
     navBar += '<li></li>';
@@ -57,7 +66,8 @@ async function liGenerator(data) {
 }
 
 update();
-setInterval(update, 1000);
+setInterval(isUpdate, 1000);
+
 
 // liGenerator();
 
@@ -71,8 +81,6 @@ async function showTransport(data) {
     data["departureList"].forEach(item => {
         if (item["servingLine"]["name"] === currentTransportType) {
             table += `<tr><td>${item["servingLine"]["number"]}</td><td>${item["servingLine"]["direction"]}</td>`;
-            //table += presenceOfRealDate(item);
-            // table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"])}:${timeFormat(item["dateTime"]["minute"])}</td>`;
             table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</td>`;
             table += `<td>${minutesToHours(item["countdown"])}</td></tr>`;
             counter = false;
