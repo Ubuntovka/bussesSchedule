@@ -104,9 +104,9 @@ th {
 
 .header {
     overflow: hidden;
-    background-color: transparent;
+    background-color: #ddddddaa;
     padding: 20px 10px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #dddddd;
 }
 
 .header a {
@@ -116,13 +116,17 @@ th {
     padding: 12px;
     text-decoration: none;
     font-size: 18px; 
-    line-height: 25px;
+    line-height: 20px;
     border-radius: 4px;
 }
 
 .header a.logo {
     font-size: 25px;
     font-weight: bold;
+}
+
+.header a.logo:hover {
+    background-color: transparent;
 }
 
 .header a:hover {
