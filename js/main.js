@@ -50,6 +50,9 @@ async function isUpdate(){
 }
 
 async function liGenerator(data) {
+    const stationNameContainer = document.getElementById('station_name_container');
+    stationNameContainer.innerHTML = `<h1 style="text-align:center;">${streetFromUrl}</h1>`;
+
     let navBar = '<ul class="filter-btn-row">';
     navBar += '<li></li>';
     const transportsSet = new Set();
@@ -127,4 +130,3 @@ function presenceOfRealDate (item){
         return `-`;
     }
 }
-
