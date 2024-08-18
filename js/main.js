@@ -1,7 +1,13 @@
-const apiUrlList = {
-    "Robert-Siewert-Str": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON",
-    "Morgenleite": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Morgenleite&type_dm=any&nameInfo_dm=36030304&useRealtime=1&outputFormat=JSON"
-}
+// const apiUrlList = {
+//     "Robert-Siewert-Str": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON",
+//     "Morgenleite": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Morgenleite&type_dm=any&nameInfo_dm=36030304&useRealtime=1&outputFormat=JSON"
+// }
+
+// let apiUrlList = new Map();
+// generateApiUrlList();
+
+// console.log(apiUrlList);
+
 
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
@@ -14,15 +20,32 @@ function getParameterByName(name, url) {
 }
 
 var streetFromUrl = getParameterByName('street');
+let streetName;
 
-const apiUrl = apiUrlList[streetFromUrl];
+// const apiUrl = apiUrlList[streetFromUrl];
+// const apiUrl = apiUrlList.get(streetFromUrl);
+
+// console.log(apiUrl);
 
 //const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
 //const apiUrl = 'http://localhost:3000/vms';
 let currentTransportType;
 
+async function fetchStationsData(){
+    const stationsData = await stationsJsonParser();
+    let apiDict = new Map();
+    stationsData["stopFinder"].points.forEach(item => {
+        apiDict.set(item["stateless"], [`https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+${item["object"]}&nameInfo_dm=${item["stateless"]}&type_dm=any&useRealtime=1&outputFormat=JSON`, item["object"]]);
+    });
+    return apiDict;
+}
+
 
 async function fetchData() {
+    const apiDict = await fetchStationsData();
+    const apiUrl = apiDict.get(streetFromUrl)[0];
+    streetName = apiDict.get(streetFromUrl)[1];
+
     const response = await fetch(apiUrl);
     const data = await response.json();
     return data;
@@ -53,7 +76,7 @@ async function isUpdate() {
 
 async function liGenerator(data) {
     const stationNameContainer = document.getElementById('station_name_container');
-    stationNameContainer.innerHTML = `<h1 style="text-align:center;">${streetFromUrl}</h1>`;
+    stationNameContainer.innerHTML = `<h1 style="text-align:center;">${streetName}</h1>`;
 
     let navBar = '<ul class="filter-btn-row">';
     navBar += '<li></li>';
@@ -133,6 +156,7 @@ function presenceOfRealDate(item) {
     }
 }
 
+// List of all stations on the front page
 async function stationsJsonParser() {
     const response = await fetch("https://efa.vvo-online.de/VMSSL3/XSLT_STOPFINDER_REQUEST?coordOutputFormat=WGS84%5Bdd.ddddd%5D&name_sf=chemnitz&outputFormat=JSON&type_sf=any&std3_suggestMacro=std3_suggest&std3_pageMacro=stt");
     return await response.json();
@@ -142,13 +166,15 @@ async function stationStarterList() {
     const stationsData = await stationsJsonParser();
     let stationsList = '';
     const stationsListContainer = document.getElementById('stations_list_container');
-    console.log(stationsData);
 
     stationsData["stopFinder"].points.forEach(item => {
-        console.log(item["object"]);
-        stationsList += `<a href='html/station.html?street=${item["object"]}' class="station-link-btn">${item["object"]}</a>`;
+        stationsList += `<a href='html/station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a>`;
     });
     stationsListContainer.innerHTML = stationsList;
 }
 
-stationStarterList();
+if (window.location.pathname === '/busses_api/index.html'){
+    stationStarterList();
+}
+
+
