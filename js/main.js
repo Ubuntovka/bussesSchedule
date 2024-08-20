@@ -164,17 +164,38 @@ async function stationsJsonParser() {
 
 async function stationStarterList() {
     const stationsData = await stationsJsonParser();
-    let stationsList = '';
+    let stationsList = '<ul id="myUL">';
     const stationsListContainer = document.getElementById('stations_list_container');
 
     stationsData["stopFinder"].points.forEach(item => {
-        stationsList += `<a href='html/station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a>`;
+        stationsList += `<li><a href='html/station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
     });
+    stationsList += '</ul>';
     stationsListContainer.innerHTML = stationsList;
 }
 
 if (window.location.pathname === '/busses_api/index.html'){
     stationStarterList();
+}
+
+function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
 }
 
 
