@@ -1,27 +1,51 @@
+// const apiUrlList = {
+//     "Robert-Siewert-Str": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON",
+//     "Morgenleite": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Morgenleite&type_dm=any&nameInfo_dm=36030304&useRealtime=1&outputFormat=JSON"
+// }
 
-const apiUrlList = {"Robert-Siewert-Str": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON",
-                    "Morgenleite": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Morgenleite&type_dm=any&nameInfo_dm=36030304&useRealtime=1&outputFormat=JSON"}
+// let apiUrlList = new Map();
+// generateApiUrlList();
+
+// console.log(apiUrlList);
+
 
 function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
 
 var streetFromUrl = getParameterByName('street');
+let streetName;
 
-const apiUrl = apiUrlList[streetFromUrl];
+// const apiUrl = apiUrlList[streetFromUrl];
+// const apiUrl = apiUrlList.get(streetFromUrl);
+
+// console.log(apiUrl);
 
 //const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
 //const apiUrl = 'http://localhost:3000/vms';
 let currentTransportType;
 
+async function fetchStationsData(){
+    const stationsData = await stationsJsonParser();
+    let apiDict = new Map();
+    stationsData["stopFinder"].points.forEach(item => {
+        apiDict.set(item["stateless"], [`https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+${item["object"]}&nameInfo_dm=${item["stateless"]}&type_dm=any&useRealtime=1&outputFormat=JSON`, item["object"]]);
+    });
+    return apiDict;
+}
+
 
 async function fetchData() {
+    const apiDict = await fetchStationsData();
+    const apiUrl = apiDict.get(streetFromUrl)[0];
+    streetName = apiDict.get(streetFromUrl)[1];
+
     const response = await fetch(apiUrl);
     const data = await response.json();
     return data;
@@ -32,18 +56,19 @@ function changeType(transportType) {
     update();
 }
 
-async function update(){
+async function update() {
     console.log("UPDATE");
     const data = await fetchData();
     liGenerator(data);
     showTransport(data);
+
 }
 
 let currentdepartureIn;
 
-async function isUpdate(){
+async function isUpdate() {
     const data = await fetchData();
-    if(data["departureList"][0]["countdown"] != currentdepartureIn){
+    if (data["departureList"][0]["countdown"] != currentdepartureIn) {
         update();
         currentdepartureIn = data["departureList"][0]["countdown"];
     }
@@ -51,14 +76,14 @@ async function isUpdate(){
 
 async function liGenerator(data) {
     const stationNameContainer = document.getElementById('station_name_container');
-    stationNameContainer.innerHTML = `<h1 style="text-align:center;">${streetFromUrl}</h1>`;
+    stationNameContainer.innerHTML = `<h1 style="text-align:center;">${streetName}</h1>`;
 
     let navBar = '<ul class="filter-btn-row">';
     navBar += '<li></li>';
     const transportsSet = new Set();
     data["servingLines"].lines.forEach(item => {
 
-        if(!transportsSet.has(item["mode"]["product"])){
+        if (!transportsSet.has(item["mode"]["product"])) {
             navBar += `<li><button class="filter-btn" onclick="changeType('${item["mode"]["product"]}')">${item["mode"]["product"]}</button></li>`;
         }
         transportsSet.add(item["mode"]["product"]);
@@ -68,9 +93,10 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
-
-update();
-setInterval(isUpdate, 1000);
+if (window.location.pathname !== '/busses_api/index.html') {
+    update();
+    setInterval(isUpdate, 1000);
+}
 
 
 async function showTransport(data) {
@@ -91,7 +117,7 @@ async function showTransport(data) {
     const tableContainer = document.getElementById('table_container');
     const noTransportContainer = document.getElementById('no_transport_container');
 
-    if(!counter){
+    if (!counter) {
         table += '</table>';
         tableContainer.innerHTML = table;
         noTransportContainer.innerHTML = "";
@@ -102,8 +128,8 @@ async function showTransport(data) {
 }
 
 
-function minutesToHours(min){
-    if(min <= 60){
+function minutesToHours(min) {
+    if (min <= 60) {
         return min + " min.";
     } else {
         let hours = Math.floor(min / 60);
@@ -113,20 +139,63 @@ function minutesToHours(min){
 
 }
 
-function timeFormat(hour, minute){
+function timeFormat(hour, minute) {
     return (hour < 10 ? '0' : '') + hour + ":" + (minute < 10 ? '0' : '') + minute;
 }
 
-
-function presenceOfRealDate (item){
-    if (item["realDateTime"]){
-        if (item["servingLine"]["delay"] > 0){
+function presenceOfRealDate(item) {
+    if (item["realDateTime"]) {
+        if (item["servingLine"]["delay"] > 0) {
             return `<span class="real-time-delayed">${timeFormat(item["realDateTime"]["hour"], item["realDateTime"]["minute"])}</span>`;
-        } else{
+        } else {
             return `<span class="real-time-not-delayed">${timeFormat(item["realDateTime"]["hour"], item["realDateTime"]["minute"])}</span>`;
         }
-        
+
     } else {
         return `-`;
     }
 }
+
+// List of all stations on the front page
+async function stationsJsonParser() {
+    const response = await fetch("https://efa.vvo-online.de/VMSSL3/XSLT_STOPFINDER_REQUEST?coordOutputFormat=WGS84%5Bdd.ddddd%5D&name_sf=chemnitz&outputFormat=JSON&type_sf=any&std3_suggestMacro=std3_suggest&std3_pageMacro=stt");
+    return await response.json();
+}
+
+async function stationStarterList() {
+    const stationsData = await stationsJsonParser();
+    let stationsList = '<ul id="myUL">';
+    const stationsListContainer = document.getElementById('stations_list_container');
+
+    stationsData["stopFinder"].points.forEach(item => {
+        stationsList += `<li><a href='html/station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
+    });
+    stationsList += '</ul>';
+    stationsListContainer.innerHTML = stationsList;
+}
+
+if (window.location.pathname === '/busses_api/index.html'){
+    stationStarterList();
+}
+
+function myFunction() {
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+
+
