@@ -3,12 +3,6 @@
 //     "Morgenleite": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Morgenleite&type_dm=any&nameInfo_dm=36030304&useRealtime=1&outputFormat=JSON"
 // }
 
-// let apiUrlList = new Map();
-// generateApiUrlList();
-
-// console.log(apiUrlList);
-
-
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -22,16 +16,11 @@ function getParameterByName(name, url) {
 var streetFromUrl = getParameterByName('street');
 let streetName;
 
-// const apiUrl = apiUrlList[streetFromUrl];
-// const apiUrl = apiUrlList.get(streetFromUrl);
-
-// console.log(apiUrl);
-
 //const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
 //const apiUrl = 'http://localhost:3000/vms';
 let currentTransportType;
 
-async function fetchStationsData(){
+async function fetchStationsData() {
     const stationsData = await stationsJsonParser();
     let apiDict = new Map();
     stationsData["stopFinder"].points.forEach(item => {
@@ -93,7 +82,7 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
-if (window.location.pathname !== '/busses_api/index.html') {
+if (window.location.pathname !== '/bussesSchedule/index.html') {
     update();
     setInterval(isUpdate, 1000);
 }
@@ -174,7 +163,7 @@ async function stationStarterList() {
     stationsListContainer.innerHTML = stationsList;
 }
 
-if (window.location.pathname === '/busses_api/index.html'){
+if (window.location.pathname === '/bussesSchedule/index.html') {
     stationStarterList();
 }
 
