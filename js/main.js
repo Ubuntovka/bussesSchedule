@@ -1,8 +1,3 @@
-// const apiUrlList = {
-//     "Robert-Siewert-Str": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON",
-//     "Morgenleite": "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Morgenleite&type_dm=any&nameInfo_dm=36030304&useRealtime=1&outputFormat=JSON"
-// }
-
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -16,9 +11,7 @@ function getParameterByName(name, url) {
 var streetFromUrl = getParameterByName('street');
 let streetName;
 
-//const apiUrl = "https://efa.vvo-online.de/VMSSL3/XSLT_DM_REQUEST?language=de&mode=direct&name_dm=Chemnitz%2C+Robert-Siewert-Str&nameInfo_dm=36030050&type_dm=any&useRealtime=1&outputFormat=JSON";
-//const apiUrl = 'http://localhost:3000/vms';
-let currentTransportType;
+let currentTransportType = "";
 
 async function fetchStationsData() {
     const stationsData = await stationsJsonParser();
@@ -57,7 +50,7 @@ let currentdepartureIn;
 
 async function isUpdate() {
     const data = await fetchData();
-    if (data["departureList"][0]["countdown"] != currentdepartureIn) {
+    if (data["departureList"][0]["countdown"] !== currentdepartureIn) {
         update();
         currentdepartureIn = data["departureList"][0]["countdown"];
     }
@@ -110,9 +103,13 @@ async function showTransport(data) {
         table += '</table>';
         tableContainer.innerHTML = table;
         noTransportContainer.innerHTML = "";
-    } else {
+    } else if (data["servingLines"]["lines"].length === 1){
         tableContainer.innerHTML = "";
         noTransportContainer.innerHTML = "<h3>No transport available</h3>";
+    }
+    else {
+        tableContainer.innerHTML = "";
+        noTransportContainer.innerHTML = "<h3>Select the type of transport</h3>";
     }
 }
 
