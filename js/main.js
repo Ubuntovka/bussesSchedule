@@ -75,7 +75,12 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
-if (window.location.pathname !== '/bussesSchedule/index.html') {
+// if (window.location.pathname !== '/bussesSchedule/index.html') {
+//     update();
+//     setInterval(isUpdate, 1000);
+// }
+
+if (window.location.pathname !== '/busses_api/index.html') {
     update();
     setInterval(isUpdate, 1000);
 }
@@ -84,12 +89,13 @@ if (window.location.pathname !== '/bussesSchedule/index.html') {
 async function showTransport(data) {
     let table = '<table>';
     table += `<caption><h3>${currentTransportType}</h3></caption>`;
-    table += '<tr><th>Number</th><th>Direction</th><th>Time</th><th>Departure in</th></tr>';
+    table += '<tr><th>Number</th><th>Direction</th><th>Platform</th><th>Time</th><th>Departure in</th></tr>';
     //
     let counter = true;
     data["departureList"].forEach(item => {
         if (item["servingLine"]["name"] === currentTransportType) {
             table += `<tr><td>${item["servingLine"]["number"]}</td><td>${item["servingLine"]["direction"]}</td>`;
+            table += `<td>${item["platform"]}</td>`;
             table += `<td>${presenceOfRealDate(item)}<br>${timeFormat(item["dateTime"]["hour"], item["dateTime"]["minute"])}</td>`;
             table += `<td>${minutesToHours(item["countdown"])}</td></tr>`;
             counter = false;
@@ -160,7 +166,11 @@ async function stationStarterList() {
     stationsListContainer.innerHTML = stationsList;
 }
 
-if (window.location.pathname === '/bussesSchedule/index.html') {
+// if (window.location.pathname === '/bussesSchedule/index.html') {
+//     stationStarterList();
+// }
+
+if (window.location.pathname === '/busses_api/index.html') {
     stationStarterList();
 }
 
