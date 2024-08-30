@@ -1,6 +1,6 @@
 html, body {
     width: 100%;
-    height:100%;
+    height: 100%;
 }
 
 body {
@@ -27,8 +27,8 @@ body {
 }
 
 table {
-    width: 45%;
-    height: 100px;
+    width: auto;
+    height: auto;
     display: inline-block;
 
 }
@@ -50,13 +50,13 @@ th {
 
 
 .station-link-btn:link, .station-link-btn:visited {
-  background-color: #ddddddaa;
-  color: black;
-  padding: 10px 16px;
-  margin: 5px 40%;
-  text-align: center;
-  text-decoration: none;
-  display: block;
+    background-color: #ddddddaa;
+    color: black;
+    padding: 10px 16px;
+    margin: 5px 40%;
+    text-align: center;
+    text-decoration: none;
+    display: block;
 }
 
 .station-link-btn:hover, .station-link-btn:active {
@@ -94,15 +94,16 @@ th {
     background-color: #69696949;
 }
 
-.real-time-delayed{
+.real-time-delayed {
     color: red;
 }
 
-.real-time-not-delayed{
+.real-time-not-delayed {
     color: green;
 }
 
 .header {
+    width: auto;
     overflow: hidden;
     background-color: #ddddddaa;
     padding: 20px 10px;
@@ -115,7 +116,7 @@ th {
     text-align: center;
     padding: 12px;
     text-decoration: none;
-    font-size: 18px; 
+    font-size: 18px;
     line-height: 20px;
     border-radius: 4px;
 }
@@ -135,7 +136,7 @@ th {
 }
 
 .header-right {
-   float: right;
+    float: right;
 }
 
 #myInput {
@@ -172,7 +173,7 @@ th {
 }
 
 @media only screen and (max-width: 700px) {
-    
+
     .station-link-btn:link, .station-link-btn:visited {
         background-color: #ddddddaa;
         color: black;
@@ -184,14 +185,17 @@ th {
     }
 
     table {
-        width: 90%;
-        margin: auto;
+        width: auto;
+        height: auto;
+        font-size: 15px;
+        margin-left: 10px;
+        margin-right: 10px;
         display: inline-block;
 
     }
 
     #myInput {
-        width: 180px; /* Full-width */
+        width: 180px;
     }
 
     #myUL li a {
