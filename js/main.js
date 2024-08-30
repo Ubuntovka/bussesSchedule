@@ -84,8 +84,7 @@ if (window.location.pathname !== '/bussesSchedule/index.html') {
 async function showTransport(data) {
     let table = '<table>';
     table += `<caption><h3>${currentTransportType}</h3></caption>`;
-    table += '<tr><th>Number</th><th>Direction</th><th>Platform</th><th>Time</th><th>Departure in</th></tr>';
-    //
+    table += '<tr><th>Number</th><th>Direction</th><th>Pl.</th><th>Time</th><th>Departure in</th></tr>';
     let counter = true;
     data["departureList"].forEach(item => {
         if (item["servingLine"]["name"] === currentTransportType) {
