@@ -20,6 +20,13 @@
     </div>
 </div>
 
+<p id="demo"></p>
+
+<script>
+    // Retrieve
+    document.getElementById("demo").innerHTML = localStorage.getItem("favorite");
+</script>
+
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for stations..">
 
 <div id="stations_list_container">

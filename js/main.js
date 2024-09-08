@@ -41,6 +41,7 @@ function changeType(transportType) {
 async function update() {
     console.log("UPDATE");
     const data = await fetchData();
+    addToFavourites();
     liGenerator(data);
     showTransport(data);
 
@@ -75,7 +76,11 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
-if (window.location.pathname !== '/bussesSchedule/index.html') {
+// if (window.location.pathname !== '/bussesSchedule/index.html') {
+//     update();
+//     setInterval(isUpdate, 1000);
+// }
+if (window.location.pathname !== '/busses_api/index.html') {
     update();
     setInterval(isUpdate, 1000);
 }
@@ -160,7 +165,10 @@ async function stationStarterList() {
     stationsListContainer.innerHTML = stationsList;
 }
 
-if (window.location.pathname === '/bussesSchedule/index.html') {
+// if (window.location.pathname === '/bussesSchedule/index.html') {
+//     stationStarterList();
+// }
+if (window.location.pathname === '/busses_api/index.html') {
     stationStarterList();
 }
 
@@ -183,5 +191,16 @@ function myFunction() {
         }
     }
 }
+
+function addFavourite(stationId){
+    localStorage.setItem("favorite", stationId);
+}
+
+function addToFavourites(){
+    const addToFavouritesContainer = document.getElementById('add_to_favourites_container');
+    let textButton = '<button onclick="addFavourite(streetFromUrl)">Add to Favourites</button>';
+    addToFavouritesContainer.innerHTML = textButton;
+}
+
 
 
