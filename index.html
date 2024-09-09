@@ -24,7 +24,7 @@
 
 <script>
     // Retrieve
-    document.getElementById("demo").innerHTML = localStorage.getItem("favorite");
+    document.getElementById("demo").innerHTML = JSON.parse(localStorage.getItem("favorite"));
 </script>
 
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for stations..">

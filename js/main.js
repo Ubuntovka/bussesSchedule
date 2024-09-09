@@ -193,7 +193,11 @@ function myFunction() {
 }
 
 function addFavourite(stationId){
-    localStorage.setItem("favorite", stationId);
+    let newStation = [];
+    newStation.push(JSON.parse(localStorage.getItem("favorite")));
+    newStation.push(stationId);
+    localStorage.setItem("favorite", JSON.stringify(newStation));
+    // localStorage.removeItem("favorite");
 }
 
 function addToFavourites(){
