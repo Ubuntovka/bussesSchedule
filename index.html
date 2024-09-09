@@ -15,6 +15,7 @@
     <a href="index.html" class="logo">Schedule</a>
     <div class="header-right">
         <a href="index.html"><i class="fa-solid fa-house"></i></a>
+        <a href="html/favourites.html"><i class="fa-solid fa-star"></i></a>
         <a href="html/contact.html">Contact</a>
         <a href="html/about.html">About</a>
     </div>
@@ -24,7 +25,8 @@
 
 <script>
     // Retrieve
-    document.getElementById("demo").innerHTML = JSON.parse(localStorage.getItem("favorite"));
+    let a = JSON.parse(localStorage.getItem("favorite"))
+    document.getElementById("demo").innerHTML = a;
 </script>
 
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for stations..">
