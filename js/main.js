@@ -80,7 +80,7 @@ async function liGenerator(data) {
 //     update();
 //     setInterval(isUpdate, 1000);
 // }
-if (window.location.pathname !== '/busses_api/index.html') {
+if (window.location.pathname !== '/busses_api/index.html' && window.location.pathname !== '/busses_api/html/favourites.html') {
     update();
     setInterval(isUpdate, 1000);
 }
@@ -193,18 +193,74 @@ function myFunction() {
 }
 
 function addFavourite(stationId){
-    let newStation = [];
-    newStation.push(JSON.parse(localStorage.getItem("favorite")));
-    newStation.push(stationId);
-    localStorage.setItem("favorite", JSON.stringify(newStation));
+    // let newStation = [];
+    // newStation.push(JSON.parse(localStorage.getItem("favorite")));
+    // newStation.push(stationId);
+    // localStorage.setItem("favorite", JSON.stringify(newStation));
+    let a = localStorage.getItem("favorite");
+    let oldString;
+    if(a != null){
+        oldString = localStorage.getItem("favorite");
+        localStorage.setItem("favorite", oldString.slice(0, -1) + "," + stationId + ']');
+
+    } else{
+        localStorage.setItem("favorite", "[" + stationId + ']');
+    }
+
+
+    // localStorage.setItem("favorite", a);
     // localStorage.removeItem("favorite");
+}
+
+function deleteFavourites(){
+    localStorage.removeItem("favorite");
 }
 
 function addToFavourites(){
     const addToFavouritesContainer = document.getElementById('add_to_favourites_container');
     let textButton = '<button onclick="addFavourite(streetFromUrl)">Add to Favourites</button>';
+    textButton += '<button onclick="deleteFavourites()">Delete all Favourites</button>';
     addToFavouritesContainer.innerHTML = textButton;
 }
 
+async function favouritesList(){
+    // const favouritesListContainer = document.getElementById('favourites_list_container');
+    // const localFavourites = JSON.parse(localStorage.getItem("favorite"));
+    // console.log(localFavourites);
+    // console.log(localFavourites[0]);
+    // console.log(localFavourites[1]);
+    //
+    // // let textList = '';
+    // const stationsData = await stationsJsonParser();
+    // let stationsList = '<ul id="myUL">';
+    //
+    // stationsData["stopFinder"].points.forEach(item => {
+    //     if(localFavourites.includes(item["stateless"])){
+    //         stationsList += `<li><a href='html/station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
+    //     }
+    // });
+    // stationsList += '</ul>';
+    // favouritesListContainer.innerHTML = stationsList;
 
+    let favouritesList = JSON.parse(localStorage.getItem("favorite"));
+    console.log(favouritesList);
+    console.log(favouritesList[0]);
+
+    const stationsData = await stationsJsonParser();
+    let stationsList = '<ul id="myUL">';
+    const stationsListContainer = document.getElementById('favourites_list_container');
+
+    stationsData["stopFinder"].points.forEach(item => {
+        if(favouritesList.includes(Number(item["stateless"]))){
+            console.log("Worked");
+            stationsList += `<li><a href='station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
+        }
+    });
+    stationsList += '</ul>';
+    stationsListContainer.innerHTML = stationsList;
+}
+
+if (window.location.pathname === '/busses_api/html/favourites.html') {
+    favouritesList();
+}
 
