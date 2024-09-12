@@ -75,14 +75,15 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
-// if (window.location.pathname !== '/bussesSchedule/index.html') {
-//     update();
-//     setInterval(isUpdate, 1000);
-// }
-if (window.location.pathname !== '/busses_api/index.html' && window.location.pathname !== '/busses_api/html/favourites.html') {
+if (window.location.pathname !== '/bussesSchedule/index.html' && window.location.pathname !== '/bussesSchedule/html/favourites.html') {
     update();
     setInterval(isUpdate, 1000);
 }
+
+// if (window.location.pathname !== '/busses_api/index.html' && window.location.pathname !== '/busses_api/html/favourites.html') {
+//     update();
+//     setInterval(isUpdate, 1000);
+// }
 
 
 async function showTransport(data) {
@@ -163,10 +164,7 @@ async function stationStarterList() {
     stationsListContainer.innerHTML = stationsList;
 }
 
-// if (window.location.pathname === '/bussesSchedule/index.html') {
-//     stationStarterList();
-// }
-if (window.location.pathname === '/busses_api/index.html') {
+if (window.location.pathname === '/bussesSchedule/index.html') {
     stationStarterList();
 }
 
