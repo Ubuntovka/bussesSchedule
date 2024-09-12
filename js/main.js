@@ -206,6 +206,7 @@ function addFavourite(stationId) {
 
 function deleteAllFavourites() {
     localStorage.removeItem("favorite");
+    window.location.reload();
 }
 
 function deleteFromFavourites(itemToRemove) {
@@ -231,13 +232,17 @@ function favouritesButtons() {
 
 // Shows the list of favourites
 async function favouritesList() {
+    const favStationsHeaderContainer = document.getElementById('fav_stations_header_container');
+    if(localStorage.getItem("favorite") == null){
+        favStationsHeaderContainer.innerHTML = `<h1 style="text-align:center;">Your do not have any favourite stations yet.</h1>`;
+    } else {
+        favStationsHeaderContainer.innerHTML = `<h1 style="text-align:center;">Your favourite stations:</h1>`;
+    }
 
     let favouritesList = JSON.parse(localStorage.getItem("favorite"));
-
     const stationsData = await stationsJsonParser();
     let stationsList = '<ul id="myUL">';
     const stationsListContainer = document.getElementById('favourites_list_container');
-
     stationsData["stopFinder"].points.forEach(item => {
         if (favouritesList.includes(Number(item["stateless"]))) {
             stationsList += `<li><a href='station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
@@ -245,10 +250,12 @@ async function favouritesList() {
     });
     stationsList += '</ul>';
     stationsListContainer.innerHTML = stationsList;
-}
 
-if (window.location.pathname === '/busses_api/html/favourites.html') {
-    favouritesList();
+    const deleteAllFavouritesContainer = document.getElementById('delete_all_fav_container');
+    if(localStorage.getItem("favorite") != null){
+        deleteAllFavouritesContainer.innerHTML = `<button class="delete-all-button" onclick="deleteAllFavourites()">
+        <i class="fa-solid fa-trash"></i> Delete all favourites</button>`;
+    }
 }
 
 
