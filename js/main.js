@@ -41,7 +41,6 @@ function changeType(transportType) {
 async function update() {
     console.log("UPDATE");
     const data = await fetchData();
-    // favouritesButtons();
     liGenerator(data);
     showTransport(data);
 
@@ -171,7 +170,7 @@ if (window.location.pathname === '/busses_api/index.html') {
     stationStarterList();
 }
 
-function myFunction() {
+function searchBar() {
     // Declare variables
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById('myInput');
@@ -191,6 +190,7 @@ function myFunction() {
     }
 }
 
+// Adds a new favourite station to the list of favourites
 function addFavourite(stationId) {
     let a = localStorage.getItem("favorite");
     let oldString;
@@ -218,17 +218,18 @@ function deleteFromFavourites(itemToRemove) {
 
 // Shows buttons on the station page
 function favouritesButtons() {
-    const addToFavouritesContainer = document.getElementById('add_to_favourites_container');
+    const addToFavouritesContainer = document.getElementById('favourites_button_container');
     let favouritesList = [];
     favouritesList += JSON.parse(localStorage.getItem("favorite"));
-    let textButton = '<button onclick="addFavourite(streetFromUrl)"><i class="fa-regular fa-star"></i></button>';
+    let textButton = '<button class="favourites-button" onclick="addFavourite(streetFromUrl)"><i class="fa-regular fa-star"></i></button>';
     if (favouritesList.includes(Number(streetFromUrl))) {
-        textButton = '<button onclick="deleteFromFavourites(streetFromUrl)"><i class="fa-solid fa-star"></i></button>';
+        textButton = '<button class="favourites-button" onclick="deleteFromFavourites(streetFromUrl)"><i class="fa-solid fa-star"></i></button>';
     }
     console.log(textButton);
     addToFavouritesContainer.innerHTML = textButton;
 }
 
+// Shows the list of favourites
 async function favouritesList() {
 
     let favouritesList = JSON.parse(localStorage.getItem("favorite"));
