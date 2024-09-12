@@ -41,7 +41,7 @@ function changeType(transportType) {
 async function update() {
     console.log("UPDATE");
     const data = await fetchData();
-    addToFavourites();
+    // favouritesButtons();
     liGenerator(data);
     showTransport(data);
 
@@ -108,11 +108,10 @@ async function showTransport(data) {
         table += '</table>';
         tableContainer.innerHTML = table;
         noTransportContainer.innerHTML = "";
-    } else if (data["servingLines"]["lines"].length === 1){
+    } else if (data["servingLines"]["lines"].length === 1) {
         tableContainer.innerHTML = "";
         noTransportContainer.innerHTML = "<h3>No transport available</h3>";
-    }
-    else {
+    } else {
         tableContainer.innerHTML = "";
         noTransportContainer.innerHTML = "<h3>Select the type of transport</h3>";
     }
@@ -192,67 +191,54 @@ function myFunction() {
     }
 }
 
-function addFavourite(stationId){
-    // let newStation = [];
-    // newStation.push(JSON.parse(localStorage.getItem("favorite")));
-    // newStation.push(stationId);
-    // localStorage.setItem("favorite", JSON.stringify(newStation));
+function addFavourite(stationId) {
     let a = localStorage.getItem("favorite");
     let oldString;
-    if(a != null){
+    if (a != null) {
         oldString = localStorage.getItem("favorite");
         localStorage.setItem("favorite", oldString.slice(0, -1) + "," + stationId + ']');
 
-    } else{
+    } else {
         localStorage.setItem("favorite", "[" + stationId + ']');
     }
-
-
-    // localStorage.setItem("favorite", a);
-    // localStorage.removeItem("favorite");
+    favouritesButtons();
 }
 
-function deleteFavourites(){
+function deleteAllFavourites() {
     localStorage.removeItem("favorite");
 }
 
-function addToFavourites(){
+function deleteFromFavourites(itemToRemove) {
+    let favouritesList = JSON.parse(localStorage.getItem("favorite"));
+    favouritesList.splice(favouritesList.indexOf(itemToRemove), 1);
+
+    localStorage.setItem("favorite", JSON.stringify(favouritesList));
+    favouritesButtons();
+}
+
+// Shows buttons on the station page
+function favouritesButtons() {
     const addToFavouritesContainer = document.getElementById('add_to_favourites_container');
-    let textButton = '<button onclick="addFavourite(streetFromUrl)">Add to Favourites</button>';
-    textButton += '<button onclick="deleteFavourites()">Delete all Favourites</button>';
+    let favouritesList = [];
+    favouritesList += JSON.parse(localStorage.getItem("favorite"));
+    let textButton = '<button onclick="addFavourite(streetFromUrl)"><i class="fa-regular fa-star"></i></button>';
+    if (favouritesList.includes(Number(streetFromUrl))) {
+        textButton = '<button onclick="deleteFromFavourites(streetFromUrl)"><i class="fa-solid fa-star"></i></button>';
+    }
+    console.log(textButton);
     addToFavouritesContainer.innerHTML = textButton;
 }
 
-async function favouritesList(){
-    // const favouritesListContainer = document.getElementById('favourites_list_container');
-    // const localFavourites = JSON.parse(localStorage.getItem("favorite"));
-    // console.log(localFavourites);
-    // console.log(localFavourites[0]);
-    // console.log(localFavourites[1]);
-    //
-    // // let textList = '';
-    // const stationsData = await stationsJsonParser();
-    // let stationsList = '<ul id="myUL">';
-    //
-    // stationsData["stopFinder"].points.forEach(item => {
-    //     if(localFavourites.includes(item["stateless"])){
-    //         stationsList += `<li><a href='html/station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
-    //     }
-    // });
-    // stationsList += '</ul>';
-    // favouritesListContainer.innerHTML = stationsList;
+async function favouritesList() {
 
     let favouritesList = JSON.parse(localStorage.getItem("favorite"));
-    console.log(favouritesList);
-    console.log(favouritesList[0]);
 
     const stationsData = await stationsJsonParser();
     let stationsList = '<ul id="myUL">';
     const stationsListContainer = document.getElementById('favourites_list_container');
 
     stationsData["stopFinder"].points.forEach(item => {
-        if(favouritesList.includes(Number(item["stateless"]))){
-            console.log("Worked");
+        if (favouritesList.includes(Number(item["stateless"]))) {
             stationsList += `<li><a href='station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
         }
     });
@@ -263,4 +249,9 @@ async function favouritesList(){
 if (window.location.pathname === '/busses_api/html/favourites.html') {
     favouritesList();
 }
+
+
+
+
+
 
