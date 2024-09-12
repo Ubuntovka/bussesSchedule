@@ -75,10 +75,15 @@ async function liGenerator(data) {
     ulliContainer.innerHTML = navBar;
 }
 
-if (window.location.pathname !== '/bussesSchedule/index.html') {
+if (window.location.pathname !== '/bussesSchedule/index.html' && window.location.pathname !== '/bussesSchedule/html/favourites.html') {
     update();
     setInterval(isUpdate, 1000);
 }
+
+// if (window.location.pathname !== '/busses_api/index.html' && window.location.pathname !== '/busses_api/html/favourites.html') {
+//     update();
+//     setInterval(isUpdate, 1000);
+// }
 
 
 async function showTransport(data) {
@@ -103,11 +108,10 @@ async function showTransport(data) {
         table += '</table>';
         tableContainer.innerHTML = table;
         noTransportContainer.innerHTML = "";
-    } else if (data["servingLines"]["lines"].length === 1){
+    } else if (data["servingLines"]["lines"].length === 1) {
         tableContainer.innerHTML = "";
         noTransportContainer.innerHTML = "<h3>No transport available</h3>";
-    }
-    else {
+    } else {
         tableContainer.innerHTML = "";
         noTransportContainer.innerHTML = "<h3>Select the type of transport</h3>";
     }
@@ -164,7 +168,7 @@ if (window.location.pathname === '/bussesSchedule/index.html') {
     stationStarterList();
 }
 
-function myFunction() {
+function searchBar() {
     // Declare variables
     var input, filter, ul, li, a, i, txtValue;
     input = document.getElementById('myInput');
@@ -183,5 +187,77 @@ function myFunction() {
         }
     }
 }
+
+// Adds a new favourite station to the list of favourites
+function addFavourite(stationId) {
+    let a = localStorage.getItem("favorite");
+    let oldString;
+    if (a != null) {
+        oldString = localStorage.getItem("favorite");
+        localStorage.setItem("favorite", oldString.slice(0, -1) + "," + stationId + ']');
+
+    } else {
+        localStorage.setItem("favorite", "[" + stationId + ']');
+    }
+    favouritesButtons();
+}
+
+function deleteAllFavourites() {
+    localStorage.removeItem("favorite");
+    window.location.reload();
+}
+
+function deleteFromFavourites(itemToRemove) {
+    let favouritesList = JSON.parse(localStorage.getItem("favorite"));
+    favouritesList.splice(favouritesList.indexOf(itemToRemove), 1);
+
+    localStorage.setItem("favorite", JSON.stringify(favouritesList));
+    favouritesButtons();
+}
+
+// Shows buttons on the station page
+function favouritesButtons() {
+    const addToFavouritesContainer = document.getElementById('favourites_button_container');
+    let favouritesList = [];
+    favouritesList += JSON.parse(localStorage.getItem("favorite"));
+    let textButton = '<button class="favourites-button" onclick="addFavourite(streetFromUrl)"><i class="fa-regular fa-star"></i></button>';
+    if (favouritesList.includes(Number(streetFromUrl))) {
+        textButton = '<button class="favourites-button" onclick="deleteFromFavourites(streetFromUrl)"><i class="fa-solid fa-star"></i></button>';
+    }
+    console.log(textButton);
+    addToFavouritesContainer.innerHTML = textButton;
+}
+
+// Shows the list of favourites
+async function favouritesList() {
+    const favStationsHeaderContainer = document.getElementById('fav_stations_header_container');
+    if(localStorage.getItem("favorite") == null){
+        favStationsHeaderContainer.innerHTML = `<h1 style="text-align:center;">Your do not have any favourite stations yet.</h1>`;
+    } else {
+        favStationsHeaderContainer.innerHTML = `<h1 style="text-align:center;">Your favourite stations:</h1>`;
+    }
+
+    let favouritesList = JSON.parse(localStorage.getItem("favorite"));
+    const stationsData = await stationsJsonParser();
+    let stationsList = '<ul id="myUL">';
+    const stationsListContainer = document.getElementById('favourites_list_container');
+    stationsData["stopFinder"].points.forEach(item => {
+        if (favouritesList.includes(Number(item["stateless"]))) {
+            stationsList += `<li><a href='station.html?street=${item["stateless"]}' class="station-link-btn">${item["object"]}</a></li>`;
+        }
+    });
+    stationsList += '</ul>';
+    stationsListContainer.innerHTML = stationsList;
+
+    const deleteAllFavouritesContainer = document.getElementById('delete_all_fav_container');
+    if(localStorage.getItem("favorite") != null){
+        deleteAllFavouritesContainer.innerHTML = `<button class="delete-all-button" onclick="deleteAllFavourites()">
+        <i class="fa-solid fa-trash"></i> Delete all favourites</button>`;
+    }
+}
+
+
+
+
 
 

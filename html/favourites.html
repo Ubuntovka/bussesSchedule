@@ -2,14 +2,13 @@
 <html>
 <head>
     <title>Schedule</title>
-    <meta http-equiv="Content-Type" name="viewport"
-          content="width=device-width, initial-scale=1.0, text/html, charset=UTF-8">
+    <meta http-equiv="Content-Type" name="viewport" content="width=device-width, initial-scale=1.0, text/html, charset=UTF-8">
     <script src="../js/main.js"></script>
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://kit.fontawesome.com/18651f78a2.js" crossorigin="anonymous"></script>
 </head>
 
-<body onload="favouritesButtons()">
+<body onload="favouritesList()" id="fav-body">
 
 <div class="header">
     <a href="../index.html" class="logo">Schedule</a>
@@ -21,25 +20,15 @@
     </div>
 </div>
 
-<!--  The name of the station  -->
-<div id="station_name_container">
+
+<div id="fav_stations_header_container">
 </div>
 
-<!--Sort buttons with different kind of available transport-->
-<div id="ulli_container">
+<div id="favourites_list_container">
 </div>
 
-<!--Shows a button for adding or deleting a station to fav-->
-<div id="favourites_button_container">
-</div>
-
-<!--  Shows a message when no transport available-->
-<div id="no_transport_container">
-</div>
-
-<!--  Timetable  -->
-<div id="table_container">
+<div id="delete_all_fav_container">
 </div>
 
 </body>
-</html> 
+</html>
